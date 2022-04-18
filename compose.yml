@@ -32,7 +32,7 @@ x-backend:
     &backend_environment
     <<: *env
     REDIS_URL: redis://redis:6379/
-    DATABASE_URL: postgres://postgres:postgres@postgres:5432
+    DATABASE_URL: mysql2://root:password@db:3306
     WEBPACKER_DEV_SERVER_HOST: webpacker
     MALLOC_ARENA_MAX: 2
     WEB_CONCURRENCY: ${WEB_CONCURRENCY:-1}
@@ -52,11 +52,11 @@ x-backend:
 services:
   rails:
     <<: *backend
-    command: bundle exec rails
+    command: bundle exec rails new . -c tailwind -j esbuild -d mysql
 
   web:
     <<: *backend
-    command: bundle exec rails server -b 0.0.0.0
+    command: bin/dev
     ports:
       - '3000:3000'
     depends_on:
@@ -115,7 +115,6 @@ volumes:
   node_modules:
   history:
   rails_cache:
-  postgres:
   redis:
   packs:
   packs-test:
